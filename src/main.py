@@ -1,12 +1,19 @@
 import sys
 
-from PySide6.QtWidgets import QApplication, QLabel
+from PySide6.QtWidgets import QApplication
 
-if __name__ == "__main__":
+from app.view.main_window import MainWindow
+
+
+def main() -> None:
+    """Main entry point of the program."""
     app = QApplication(sys.argv)
 
-    label = QLabel("Hello World!")
-    label.resize(300, 100)
-    label.show()
+    window = MainWindow()
+    window.show()
 
     sys.exit(app.exec())
+
+
+if __name__ == "__main__":
+    main()
