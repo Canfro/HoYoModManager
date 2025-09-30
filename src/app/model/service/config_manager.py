@@ -1,43 +1,36 @@
 import json
-from typing import Any
+from dataclasses import asdict
+from typing import TYPE_CHECKING
 
 import app
-from app.model.schemas.config_schema import ConfigSchema
+from app.model.schemas.config_schema import ConfigSchema, GameSchema
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 class ConfigManager:
     """Configuration manager module for the games in this program."""
 
-    def __init__(self, file_name: str) -> None:
-        """Each game should have its own separate ConfigManager instance.
+    def __init__(self) -> None:
+        """file_name: Name of the JSON file, including extension."""
+        self.config: ConfigSchema
+        self._config_path: Path = app.SETTINGS_DIR / "config.json"
+        self._load()
 
-        file_name: Name of the JSON file, including extension.
-        """
-        self._config: ConfigSchema | None = None
-        self._config_path = app.SETTINGS_DIR / file_name
-        self._load_config()
-
-    def _load_config(self) -> None:
-        """Loads game config from JSON file."""
+    def _load(self) -> None:
+        """Loads game config from JSON file to memory."""
         if self._config_path.exists():
             with self._config_path.open("r", encoding="utf-8") as f:
-                data = json.load(f)
-                self._config = ConfigSchema(**data)
+                data: dict = json.load(f)
+                self.config = ConfigSchema(
+                    **{k: GameSchema(**v) for k, v in data.items()},
+                )
         else:
-            self._config = ConfigSchema()
-            self._save_config()
-            self._load_config()
+            self.config = ConfigSchema()
+            self.save()
 
-    def _save_config(self) -> None:
-        """Saves changes to JSON file."""
+    def save(self) -> None:
+        """Saves changes from memory to JSON file."""
         with self._config_path.open("w", encoding="utf-8") as f:
-            json.dump(self._config.__dict__, f, indent=4)
-
-    def get(self, key: str) -> Any:
-        """Returns config value given the key."""
-        return getattr(self._config, key)
-
-    def set(self, key: str, value: Any) -> None:
-        """Set config value given the key."""
-        setattr(self._config, key, value)
-        self._save_config()
+            json.dump(asdict(self.config), f, indent=4)
