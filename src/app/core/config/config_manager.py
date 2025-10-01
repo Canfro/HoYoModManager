@@ -3,7 +3,7 @@ from dataclasses import asdict
 from typing import TYPE_CHECKING
 
 import app
-from app.model.schemas.config_schema import ConfigSchema, GameSchema
+from app.core.config.schemas import FullConfigSchema, GameConfigSchema
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -13,8 +13,8 @@ class ConfigManager:
     """Configuration manager module for the games in this program."""
 
     def __init__(self) -> None:
-        """file_name: Name of the JSON file, including extension."""
-        self.config: ConfigSchema
+        """Configuration manager module for the games in this program."""
+        self.config: FullConfigSchema
         self._config_path: Path = app.SETTINGS_DIR / "config.json"
         self._load()
 
@@ -23,11 +23,11 @@ class ConfigManager:
         if self._config_path.exists():
             with self._config_path.open("r", encoding="utf-8") as f:
                 data: dict = json.load(f)
-                self.config = ConfigSchema(
-                    **{k: GameSchema(**v) for k, v in data.items()},
+                self.config = FullConfigSchema(
+                    **{k: GameConfigSchema(**v) for k, v in data.items()},
                 )
         else:
-            self.config = ConfigSchema()
+            self.config = FullConfigSchema()
             self.save()
 
     def save(self) -> None:
