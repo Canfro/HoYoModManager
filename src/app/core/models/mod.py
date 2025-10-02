@@ -11,7 +11,7 @@ class Mod:
 
         Args:
             path (Path): full path to the mod .ini file.
-            name (str): common name of the mod.
+            name (str): name of the mod.
             character (Character): character this mod belongs to.
 
         """

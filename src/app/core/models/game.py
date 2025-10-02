@@ -1,9 +1,6 @@
-from dataclasses import field
 from pathlib import Path
-from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from app.core.models.character import Character
+from app.core.models.character import Character
 
 
 class Game:
@@ -19,5 +16,36 @@ class Game:
         """
         self.path: Path = path
         self.name: str = name
-        self.characters: list[Character] = field(default_factory=list)
+        self.characters: list[Character] = []
 
+    def enable_all(self) -> None:
+        """Enables all mods for this game."""
+        for character in self.characters:
+            character.enable_all()
+
+    def disable_all(self) -> None:
+        """Disables all mods for this game."""
+        for character in self.characters:
+            character.disable_all()
+
+    def randomize(self) -> None:
+        """Disables all mods and enables one randomly for each character."""
+        for character in self.characters:
+            character.randomize()
+
+    def fetch_characters(self) -> bool:
+        """Fetches character list from disk.
+
+        Returns:
+            True: characters fetched successfully.
+            False: aborted because game path doesn't exist.
+
+        """
+        self.characters.clear()
+        if not self.path.exists():
+            return False
+        for entry in self.path.iterdir():
+            if entry.is_dir():
+                character = Character(path=entry, name=entry.name, game=self)
+                self.characters.append(character)
+        return True

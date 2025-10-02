@@ -15,13 +15,13 @@ class ConfigManager:
     def __init__(self) -> None:
         """Configuration manager module for the games in this program."""
         self.config: FullConfigSchema
-        self._config_path: Path = app.SETTINGS_DIR / "config.json"
-        self._load()
+        self.config_path: Path = app.SETTINGS_DIR / "config.json"
+        self.load()
 
-    def _load(self) -> None:
+    def load(self) -> None:
         """Loads game config from JSON file to memory."""
-        if self._config_path.exists():
-            with self._config_path.open("r", encoding="utf-8") as f:
+        if self.config_path.exists():
+            with self.config_path.open("r", encoding="utf-8") as f:
                 data: dict = json.load(f)
                 self.config = FullConfigSchema(
                     **{k: GameConfigSchema(**v) for k, v in data.items()},
@@ -32,5 +32,6 @@ class ConfigManager:
 
     def save(self) -> None:
         """Saves changes from memory to JSON file."""
-        with self._config_path.open("w", encoding="utf-8") as f:
+        with self.config_path.open("w", encoding="utf-8") as f:
             json.dump(asdict(self.config), f, indent=4)
+

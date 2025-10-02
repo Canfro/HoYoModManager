@@ -1,10 +1,8 @@
 from pathlib import Path
-from typing import TYPE_CHECKING
+from secrets import randbelow
 
 from app.core.models.game import Game
-
-if TYPE_CHECKING:
-    from app.core.models.mod import Mod
+from app.core.models.mod import Mod
 
 
 class Character:
@@ -33,3 +31,26 @@ class Character:
         """Disables all mods for this character."""
         for mod in self.mods:
             mod.disable()
+
+    def randomize(self) -> None:
+        """Disables all mods and enables one randomly."""
+        self.disable_all()
+        idx: int = randbelow(len(self.mods))
+        self.mods[idx].enable()
+
+    def fetch_mods(self) -> bool:
+        """Fetches mod list from disk.
+
+        Returns:
+            True: mods fetched successfully.
+            False: aborted because character path doesn't exist.
+
+        """
+        self.mods.clear()
+        if not self.path.exists():
+            return False
+        for entry in self.path.iterdir():
+            if entry.is_dir():
+                mod = Mod(path=entry, name=entry.name, character=self)
+                self.mods.append(mod)
+        return True
