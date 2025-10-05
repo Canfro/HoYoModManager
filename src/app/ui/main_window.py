@@ -1,3 +1,4 @@
+from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QMainWindow
 
 
@@ -11,5 +12,4 @@ class MainWindow(QMainWindow):
         # Window
         self.setWindowTitle("HoYoModManager")
         self.resize(800, 600)
-
-
+        self.setWindowIcon(QPixmap("src/assets/icon.png"))
