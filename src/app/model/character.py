@@ -1,8 +1,8 @@
 from pathlib import Path
 from secrets import randbelow
 
-from app.core.models.game import Game
-from app.core.models.mod import Mod
+from app.model.game import Game
+from app.model.mod import Mod
 
 
 class Character:
@@ -51,6 +51,6 @@ class Character:
             return False
         for entry in self.path.iterdir():
             if entry.is_dir():
-                mod = Mod(path=entry, name=entry.name, character=self)
+                mod: Mod = Mod(path=entry, name=entry.name, character=self)
                 self.mods.append(mod)
         return True

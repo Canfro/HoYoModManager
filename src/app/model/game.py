@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from app.core.models.character import Character
+from app.model.character import Character
 
 
 class Game:
@@ -46,6 +46,10 @@ class Game:
             return False
         for entry in self.path.iterdir():
             if entry.is_dir():
-                character = Character(path=entry, name=entry.name, game=self)
+                character: Character = Character(
+                    path=entry,
+                    name=entry.name,
+                    game=self,
+                    )
                 self.characters.append(character)
         return True

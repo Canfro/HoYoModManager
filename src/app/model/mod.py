@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from app.core.models.character import Character
+from app.model.character import Character
 
 
 class Mod:
@@ -23,8 +23,8 @@ class Mod:
     def enable(self) -> None:
         """Enables mod."""
         if not self.is_enabled:
-            new_name = self.path.name.replace("DISABLED ", "", 1)
-            new_path = self.path.with_name(new_name)
+            new_name: str = self.path.name.replace("DISABLED ", "", 1)
+            new_path: Path = self.path.with_name(new_name)
             self.path.rename(new_path)
             self.path = new_path
         self.is_enabled = True
@@ -32,8 +32,8 @@ class Mod:
     def disable(self) -> None:
         """Disables mod."""
         if self.is_enabled and not self.path.name.startswith("DISABLED "):
-            new_name = f"DISABLED {self.path.name}"
-            new_path = self.path.with_name(new_name)
+            new_name: str = f"DISABLED {self.path.name}"
+            new_path: Path = self.path.with_name(new_name)
             self.path.rename(new_path)
             self.path = new_path
         self.is_enabled = False
