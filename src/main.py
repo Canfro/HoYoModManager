@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QApplication
 from app.view.main_window import MainWindow
 
 if __name__ == "__main__":
-    app: QApplication = QApplication(sys.argv)
-    window: MainWindow = MainWindow()
+    app = QApplication(sys.argv)
+    window = MainWindow()
     window.show()
-    app.exec()
+    _ = app.exec()

@@ -38,7 +38,8 @@ class ConfigManager:
             "Wuthering Waves": self.game_config(),
         }
 
-    def game_config(self) -> dict[str, str]:
+    @staticmethod
+    def game_config() -> dict[str, str]:
         """Default game config."""
         return {
             "Mods path": "",

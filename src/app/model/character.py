@@ -1,14 +1,13 @@
 from pathlib import Path
 from secrets import randbelow
 
-from app.model.game import Game
 from app.model.mod import Mod
 
 
 class Character:
     """Model class representation of a character."""
 
-    def __init__(self, path: Path, name: str, game: Game) -> None:
+    def __init__(self, path: Path, name: str) -> None:
         """Model class representation of a character.
 
         Args:
@@ -19,7 +18,6 @@ class Character:
         """
         self.path: Path = path
         self.name: str = name
-        self.game: Game = game
         self.mods: list[Mod] = []
 
     def enable_all(self) -> None:
@@ -35,7 +33,7 @@ class Character:
     def randomize(self) -> None:
         """Disables all mods and enables one randomly."""
         self.disable_all()
-        idx: int = randbelow(len(self.mods))
+        idx = randbelow(len(self.mods))
         self.mods[idx].enable()
 
     def fetch_mods(self) -> bool:
@@ -51,6 +49,6 @@ class Character:
             return False
         for entry in self.path.iterdir():
             if entry.is_dir():
-                mod: Mod = Mod(path=entry, name=entry.name, character=self)
+                mod = Mod(path=entry, name=entry.name)
                 self.mods.append(mod)
         return True
